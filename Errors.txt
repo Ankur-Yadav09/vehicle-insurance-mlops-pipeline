@@ -1,0 +1,31 @@
+Issue 1: 
+The issue
+
+Conda works by injecting a PowerShell hook so that conda activate and conda deactivate behave properly.
+Normally, when you run:
+conda init powershell
+
+Conda writes some code into your PowerShell profile ($PROFILE) that auto-loads this hook whenever you open PowerShell.
+In your case, Conda’s files (conda-hook.ps1, Conda.psm1, etc.) were already present (No action taken), but PowerShell wasn’t actually sourcing them when it started.
+
+That’s why you got:
+CondaError: Run 'conda init' before 'conda activate'
+
+→ The shell didn’t know what conda activate meant.
+
+⚡ What the fix did
+
+This command:
+
+& "C:\Users\Client\anaconda3\Scripts\conda.exe" shell.powershell hook | Out-String | Invoke-Expression
+
+
+Runs conda.exe with the special shell.powershell hook argument.
+That prints out a block of PowerShell code (the actual hook functions for conda activate, conda deactivate, etc.).
+Out-String | Invoke-Expression takes that code and executes it in your current PowerShell session.
+👉 Essentially, it manually injected the Conda hook that should have been auto-loaded at shell startup.
+
+✅ Why it resolved the issue
+
+Once the hook was injected, PowerShell understood the conda activate command.
+That’s why after running the command, your environment (vehicle) activated successfully.
