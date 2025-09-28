@@ -114,14 +114,29 @@
         >> Connect (Terminal will be launched) 
 
 28. Open EC2 and Install docker in EC2 Machine:
-      ## Optinal
-      sudo apt-get update -y
-      sudo apt-get upgrade
+      ## Optional - updates package lists to get the latest versions of available packages
+      sudo apt-get update -y    
+      ## Optional - upgrades already installed packages to their latest versions
+      sudo apt-get upgrade   
       ## Required (Because Docker is'nt there in our EC2 server - [docker --version])
-      curl -fsSL https://get.docker.com -o get-docker.sh
+      ## Required - downloads Docker installation script from Docker’s official site
+      curl -fsSL https://get.docker.com -o get-docker.sh  
+      ## Required - executes the Docker installation script to install Docker on EC2
       sudo sh get-docker.sh
-      sudo usermod -aG docker ubuntu
+      ## Required - adds the "ubuntu" user to the "docker" group (so you can run Docker without sudo)
+      sudo usermod -aG docker ubuntu  
+      ## Required - activates the new group membership for the current session 
+      ## (so changes from usermod apply immediately without rebooting)
       newgrp docker
+  
+
+
+
+  
+
+
+
+
 
 29. Next step is to connect Github with EC2(Self hosted runner):
       * select your project on Github >> go to settings >> Actions >> Runner >> New self hosted runner
